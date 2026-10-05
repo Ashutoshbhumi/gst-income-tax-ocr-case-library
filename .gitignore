@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+taxcase.db
+storage/*
+!storage/.gitkeep
+.pytest_cache/
+*.sqlite
+*.db
+.DS_Store

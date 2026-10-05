@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TaxCase OCR & Case Library</title>
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+<header><div class="brand">TaxCase <span>OCR + Case Library</span></div><div id="userbar"></div></header>
+<main id="app">
+<section id="login" class="card auth">
+<h1>Sign in</h1><p class="muted">SRS reference implementation</p>
+<form id="loginForm"><input id="email" type="email" placeholder="Email" required><input id="password" type="password" placeholder="Password" required><button>Sign in</button></form>
+<div class="demo">Demo: admin@example.com / Admin@123</div></section>
+
+<section id="workspace" hidden>
+<nav class="tabs">
+<button data-tab="dashboard">Dashboard</button><button data-tab="ocr">OCR Converter</button>
+<button data-tab="library">Case Library</button><button data-tab="clientcases">Client Cases</button>
+<button data-tab="tasks">Tasks & Diary</button><button data-tab="knowledge">Knowledge</button>
+</nav>
+
+<div id="dashboard" class="tab"><div class="grid metrics" id="metrics"></div><div class="grid two"><div class="card"><h2>Upcoming</h2><div id="upcoming"></div></div><div class="card"><h2>Case-law forums</h2><div id="forums"></div></div></div></div>
+
+<div id="ocr" class="tab" hidden>
+<div class="grid two">
+<div class="card"><h2>Process document</h2><form id="ocrForm"><input id="ocrFile" type="file" accept=".jpg,.jpeg,.png,.pdf" required><select id="ocrLang"><option value="eng">English</option></select><button>Run OCR</button></form><p class="muted">Tesseract must be installed for the default backend.</p><div id="ocrStatus"></div></div>
+<div class="card"><h2>Source / confidence</h2><img id="ocrSource" style="max-width:100%;max-height:420px;display:none;border:1px solid #ddd;border-radius:8px"><div id="ocrConfidence"></div><h2>Extracted text</h2><textarea id="ocrText" rows="20"></textarea><div><button onclick="saveOCR()">Save edits</button><button onclick="exportOCR('txt')">TXT</button><button onclick="exportOCR('docx')">DOCX</button><button onclick="exportOCR('csv')">CSV</button></div><div id="ocrMeta"></div></div>
+</div><div class="card"><h2>Your OCR history</h2><div id="ocrHistory"></div></div>
+</div>
+
+<div id="library" class="tab" hidden>
+<div class="card"><div class="toolbar"><input id="lawQ" placeholder="Search title, party, issue, section, citation"><select id="lawForum"><option value="">All forums</option><option>ITAT</option><option>HIGH_COURT</option><option>SUPREME_COURT</option><option>AAR</option><option>AAAR</option></select><select id="lawOutcome"><option value="">All outcomes</option><option>ASSESSEE_FAVOURABLE</option><option>DEPARTMENT_FAVOURABLE</option><option>MIXED</option></select><button onclick="searchLaws()">Search</button></div></div>
+<div class="grid two"><div class="card"><h2>Case-law records</h2><div id="lawResults"></div></div><div class="card"><h2>Add case law</h2><form id="lawForm">
+<input name="title" placeholder="Title" required><input name="parties" placeholder="Parties"><select name="tax_head"><option>INCOME_TAX</option><option>GST</option></select><input name="forum" placeholder="Forum" value="ITAT"><input name="sections" placeholder="Sections"><input name="issue" placeholder="Issue"><input name="assessment_year" placeholder="Assessment year"><input name="citation" placeholder="Citation"><select name="outcome"><option>MIXED</option><option>ASSESSEE_FAVOURABLE</option><option>DEPARTMENT_FAVOURABLE</option></select><textarea name="summary" placeholder="Summary"></textarea><input name="tags" placeholder="Tags, comma separated"><button>Create</button></form></div></div>
+</div>
+
+<div id="clientcases" class="tab" hidden>
+<div class="grid two"><div class="card"><h2>Clients</h2><form id="clientForm"><input name="name" placeholder="Client name" required><input name="pan" placeholder="PAN"><input name="gstin" placeholder="GSTIN"><input name="contact_email" placeholder="Email"><button>Add client</button></form><div id="clients"></div></div>
+<div class="card"><h2>Create internal case</h2><form id="clientCaseForm"><select name="client_id" id="clientSelect" required></select><input name="title" placeholder="Case title" required><select name="tax_head"><option>INCOME_TAX</option><option>GST</option></select><input name="level" value="AO" placeholder="AO / CIT(A) / NFAC / ITAT / HC"><input name="relevant_years" placeholder="Relevant year(s)"><input name="monetary_exposure" type="number" step="0.01" placeholder="Monetary exposure"><select name="status"><option>OPEN</option><option>ON_HOLD</option><option>CLOSED</option></select><label>Reply due <input name="reply_due_date" type="datetime-local"></label><label>Next hearing <input name="next_hearing" type="datetime-local"></label><label>Limitation <input name="limitation_last_date" type="datetime-local"></label><textarea name="key_issues" placeholder="Key issues"></textarea><button>Create case</button></form></div></div>
+<div class="card"><h2>Client cases</h2><div id="clientCases"></div></div>
+</div>
+
+<div id="tasks" class="tab" hidden><div class="grid two"><div class="card"><h2>My tasks</h2><div id="taskList"></div></div><div class="card"><h2>Upcoming reminders</h2><div id="reminders"></div></div></div></div>
+
+<div id="knowledge" class="tab" hidden><div class="grid two"><div class="card"><h2>Practice note</h2><form id="noteForm"><input name="title" placeholder="Title"><input name="issue_type" placeholder="Issue type"><textarea name="content" placeholder="Internal note"></textarea><button>Save note</button></form><div id="notes"></div></div><div class="card"><h2>Reports</h2><a class="button" href="/api/reports/case-laws.csv">Export case laws CSV</a><a class="button" href="/api/reports/client-cases.csv">Export client cases CSV</a><a class="button" href="/api/reports/calendar.ics">Export calendar ICS</a></div></div></div>
+</section>
+</main>
+<script src="/static/app.js"></script>
+</body></html>
